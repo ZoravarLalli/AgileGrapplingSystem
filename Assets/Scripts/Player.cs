@@ -35,8 +35,7 @@ public class Player : MonoBehaviour
     public void ChangeState(PlayerState state)
     {
         playerState = state;
-        // Add logic for if states can be changed or not depending on curr state and requested state in param
-        // Maybe the full FSM logic should go in here?
+        ///TODO Add logic for if states can be changed or not depending on curr state and requested state in param. Maybe the full FSM logic should go in here?
     }
 
     // Need to be able to identify angle of control inputs from questrig?
@@ -69,7 +68,7 @@ public class PhysicsHandler
     // Returns the force values to update player's forces according to physics calculations done frame by frame.
     public Vector3 UpdateForces()
     {
-        // Define force update based on physics calc here
+        ///TODO Define force update based on physics calc here
         return Vector3.zero;
     }
 }

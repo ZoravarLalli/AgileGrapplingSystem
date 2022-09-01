@@ -25,12 +25,13 @@ public class QuestRig : MonoBehaviour
         headBodyDistance = transform.position - headSensorTransform.position;
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+
+    void FixedUpdate()
     {
         // Use the offset to ensure updating position accounts for player's height in real world as well as gameobject position in game.
         transform.position = headSensorTransform.position + headBodyDistance;
         // Using project on plane to ensure we only rotate the body along with the head on the x and y plane, rotation on other axis for torso is unnatural
+        // Also using a timed delay for smoothness of movements
         transform.forward = Vector3.Lerp(transform.forward, Vector3.ProjectOnPlane(headSensorTransform.up, Vector3.up).normalized, Time.deltaTime * turningSmoothness);
 
         // Update the rig values according to sensor values using the created QuestSensor instances
