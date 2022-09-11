@@ -9,11 +9,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Grappleable
   - Water
   - UI
-  - 
-  - 
+  - GrappleLatch
+  - Ground
   - 
   - 
   - 
@@ -41,10 +41,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Player
-    uniqueID: 3424493877
-    locked: 0
-  - name: Grappleable
-    uniqueID: 3038466207
     locked: 0
