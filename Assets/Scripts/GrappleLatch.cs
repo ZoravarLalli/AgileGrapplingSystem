@@ -45,6 +45,7 @@ public class GrappleLatch : MonoBehaviour
 
         /// TODO latching logic
         latched = true;
+        gun.latched = true;
         // Latch the grapple by binding this transform to the transform of the collided grappleable surface
         // do it in an update loop according to boolean status
     }
@@ -53,6 +54,7 @@ public class GrappleLatch : MonoBehaviour
     public void Unlatch()
     {
         // Unlatch the grapple by unbinding this transform to the transform of the currently collided grappleable surface
+        gun.latched = false;
         latched = false;
         // Not sure what to do with unlatch yet... Destruction of latch takes place in grappleGun
     }

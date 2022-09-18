@@ -16,6 +16,7 @@ public class GrappleGun : MonoBehaviour
     private Vector3 aimingAngle;
     private bool validTarget;
     private bool isFired;
+    public bool latched;
 
     // Corresponding latch object for this gun
     [SerializeField]
@@ -31,6 +32,7 @@ public class GrappleGun : MonoBehaviour
     {
         grappleLine = gameObject.GetComponent<LineRenderer>();
         isFired = false;
+        latched = false;
     }
 
 
@@ -182,6 +184,7 @@ public class GrappleGun : MonoBehaviour
                 // asset prefab instead of instance of prefab in game... Weird error
                 Destroy(grappleObj);
                 isFired = false;
+                latched = false;
             }
         }
     }
