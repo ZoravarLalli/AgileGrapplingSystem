@@ -17,10 +17,18 @@ public class PhysicsLatchedState : PhysicsState
             // Grapple released transition to Unlatched State
             physics.ChangeState(physics.UnlatchedState);
         }
-        // Check for reeling input
-        /*else if ()
+        // Check for an attached grapple and corresponding reeling input -> ReelState
+        // going to make it so reel inputs override swing inputs
+        else if ((physics.player.CheckLeftGrapple() && physics.player.CheckLeftReelInput()) || (physics.player.CheckRightGrapple() && physics.player.CheckRightReelInput()))
         {
-
-        }*/
+            // Reel input transition to ReelState
+            physics.ChangeState(physics.ReelState);
+        }
+        // Go into a swinging state if no longer on ground and not reeling but still latched
+        else if ((physics.player.CheckLeftGrapple() || physics.player.CheckRightGrapple()) && !physics.player.IsGrounded())
+        {
+            // Latched with no ground underneath transition to SwingState
+            physics.ChangeState(physics.SwingState);
+        }
     }
 }

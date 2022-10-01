@@ -5,8 +5,8 @@ using UnityEngine;
 public class GrappleGun : MonoBehaviour
 {
     //private Transform transform; already can reference via implicit gameobject
-    [SerializeField]
-    private float reelRate;
+    //[SerializeField]
+    //private float reelRate;
     [SerializeField]
     private float projectileSpeed;
     [SerializeField]
@@ -22,6 +22,7 @@ public class GrappleGun : MonoBehaviour
     [SerializeField]
     public GameObject grappleLatch;
     private GameObject grappleObj;
+    private GrappleLatch grappleScript;
     public Transform grappleShotOrigin;
     // Reference to the oculus device that controls the functions of this class in game
     private UnityEngine.XR.InputDevice controller;
@@ -39,43 +40,6 @@ public class GrappleGun : MonoBehaviour
     private void Start()
     {
         
-    }
-
-    // Fires a GrappleLatch object from the GrappleGun's transform position along the specified trajectory angle
-    // Latch impact handling logic is in GrappleLatch.
-    public void FireGrapple(Vector3 angle)
-    {
-
-        // First check if target is valid and shot not already fired
-        if (validTarget && !isFired)
-        {
-            Debug.Log("SHOOTING GRAPPLE");
-            // Instantiate the grappleLatch prefab and set a grappleObj to reference it so we can modify script values.
-            grappleObj = Instantiate(grappleLatch, grappleShotOrigin.position, Quaternion.identity) as GameObject;
-            GrappleLatch grappleScript = grappleObj.GetComponent<GrappleLatch>();
-            // set a members in the GrappleLatch script for the gun it was shot from and corresponding controller
-            grappleScript.SetGun(gameObject.GetComponent<GrappleGun>());
-            // Set the parameters
-            grappleScript.SetAngle(angle);
-            grappleScript.SetSpeed(projectileSpeed);
-            grappleScript.SetMaxDistance(maxDistance);
-
-
-            isFired = true; // Set the shot to be true to it wont repeat
-        }
-        else
-        {
-            ///SOUND: No valid target sound
-            if (!validTarget)
-            {
-                //Debug.Log("CAN'T GRAPPLE TO THAT"); // This will fire as long as input held...
-                // Have grapple line ready at origin to fire.
-            } else if (isFired)
-            {
-                // Already fired and attempting to fire again
-                return;
-            }
-        }
     }
 
     // Calculates the aiming angle of the hand/grapplegun according to the current orientation of quest sensors.
@@ -162,6 +126,45 @@ public class GrappleGun : MonoBehaviour
         return hit.point - grappleShotOrigin.transform.position;
     }
 
+    // Fires a GrappleLatch object from the GrappleGun's transform position along the specified trajectory angle
+    // Latch impact handling logic is in GrappleLatch.
+    public void FireGrapple(Vector3 angle)
+    {
+
+        // First check if target is valid and shot not already fired
+        if (validTarget && !isFired)
+        {
+            Debug.Log("SHOOTING GRAPPLE");
+            Destroy(grappleObj); // clear the last grapple if 
+            // Instantiate the grappleLatch prefab and set a grappleObj to reference it so we can modify script values.
+            grappleObj = Instantiate(grappleLatch, grappleShotOrigin.position, Quaternion.identity) as GameObject;
+            grappleScript = grappleObj.GetComponent<GrappleLatch>();
+            // set a members in the GrappleLatch script for the gun it was shot from and corresponding controller
+            grappleScript.SetGun(gameObject.GetComponent<GrappleGun>());
+            // Set the parameters
+            grappleScript.SetAngle(angle);
+            grappleScript.SetSpeed(projectileSpeed);
+            grappleScript.SetMaxDistance(maxDistance);
+
+
+            isFired = true; // Set the shot to be true to it wont repeat
+        }
+        else
+        {
+            ///SOUND: No valid target sound
+            if (!validTarget)
+            {
+                //Debug.Log("CAN'T GRAPPLE TO THAT"); // This will fire as long as input held...
+                // Have grapple line ready at origin to fire.
+            }
+            else if (isFired)
+            {
+                // Already fired and attempting to fire again
+                return;
+            }
+        }
+    }
+
     // Check for inputs from player and fire corresponding grapple action for detected inputs
     // I think it's safer to put all input calls in FixedUpdate as the actions are going to be manipulating forces on a rigidbody in game
     void FixedUpdate()
@@ -170,15 +173,22 @@ public class GrappleGun : MonoBehaviour
 
         // Check for input for fire grapple
         bool triggerPressed;
+        bool secondaryButtonPressed;
         // This function will propel the latch originating from grappleGun position along the aimingAngle vector
         if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerPressed) && triggerPressed)
         {
             // May need to make grapples fireable while one is still held instead of after destroying old one
             FireGrapple(aimingAngle);
         }
-        else
+/*        else if(isFired == true) // keep firing so long as it is true
         {
-            if(isFired == true)
+            // keep calling firegrapple until they break grapple or fire a new one
+            FireGrapple(aimingAngle);
+        }*/
+
+        if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButtonPressed) && secondaryButtonPressed) // when press secondary button
+        {
+            if((isFired == true && latched == true) )
             {
                 // Doing destruction here as destroying in the grappleObj scripts tries to destroy 
                 // asset prefab instead of instance of prefab in game... Weird error
@@ -187,6 +197,7 @@ public class GrappleGun : MonoBehaviour
                 latched = false;
             }
         }
+        
     }
 
     // Using late update to draw grapple line so that it doesnt stutter
@@ -197,7 +208,7 @@ public class GrappleGun : MonoBehaviour
         // Check for input for fire grapple
         bool triggerPressed;
         // This function will propel the latch originating from grappleGun position along the aimingAngle vector
-        if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerPressed) && triggerPressed)
+        if (isFired == true)
         {
             // Only ever draw the line if the grapple latch is currently existing
             if (grappleObj != null)
@@ -210,11 +221,15 @@ public class GrappleGun : MonoBehaviour
             else
             {
                 grappleLine.enabled = false;
+                isFired = false;
+                latched = false;
             }
         } 
         else if (grappleObj == null) // stop drawing grapple when release grapple control
         {
             grappleLine.enabled = false;
+            isFired = false;
+            latched = false;
         }
     }
 
@@ -224,12 +239,39 @@ public class GrappleGun : MonoBehaviour
 
     }
 
+    // Returns distance from this gun to its corresponding grapple latch if there is one shot currently
+    public float distanceToGun()
+    {
+        if (latched)
+        {
+            return grappleScript.distanceToGun();
+        }
+        else
+        {
+            return 0;
+            Debug.Log("No latch has been shot to calculate distance from");
+        }
+    }
+
     // Check if the trajectory is valid, realized this is probably unneccesary
     // Player should always be able to shoot if aiming at a grappleable surface
     // regardless of trajectory. Probably taking this out.
     private bool ValidTrajectory()
     {
         return true; // always valid for now as not sure what would constitute invalid trajectory.
+    }
+
+    //Returns the direction from the shot origin position to the latch position
+    public Vector3 GetLatchDirection()
+    {
+        if (latched)
+        {
+            return grappleObj.transform.position - grappleShotOrigin.transform.position;
+        }
+        else
+        {
+            return Vector3.zero; // Send zero for force direction if no latch
+        }
     }
 }
 

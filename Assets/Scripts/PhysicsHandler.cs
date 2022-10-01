@@ -13,7 +13,17 @@ public class PhysicsHandler : MonoBehaviour
     private Vector3 velocity;
     private Vector3 acceleration;
     private float mass;
+    public Rigidbody rb;
     public Player player;
+    [SerializeField]
+    public float reelRate;
+    [SerializeField]
+    public float momentumGainRate;
+    [SerializeField]
+    public float terminalVelocity;
+    [SerializeField]
+    public float minReelLength;
+
 
     // Current state to start from and drive Finite State Machine
     PhysicsState currentState;
@@ -27,14 +37,12 @@ public class PhysicsHandler : MonoBehaviour
     // Set the first state on start
     private void Start()
     {
-        Debug.Log("1 state: " + UnlatchedState);
         currentState = UnlatchedState;
-        Debug.Log("2 state: " + currentState);
         currentState.EnterState(this);
     }
 
     // Call the corresponding update function in the current state
-    private void Update()
+    private void FixedUpdate()
     {
         Debug.Log("curr state: " + currentState);
         currentState.UpdateState(this);

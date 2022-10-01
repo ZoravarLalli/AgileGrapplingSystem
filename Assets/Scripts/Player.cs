@@ -20,13 +20,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Transform transform;
     [SerializeField]
-    private Rigidbody rb;
-    [SerializeField]
     private Camera playerCamera;
     private Vector3 forces; // maybe should be a matrix instead
     [SerializeField]
     // Instance of physics handler to use in conjunction with state machine
     private PhysicsHandler physics;
+    // Using an inputmanager class to be able to access live input data easily
+    // can be public as it is just a collection of getters 
+    // and methods to provide the returns of the getters
+    public InputManager inputs;
+    private bool isGrounded;
+    private int collisionCount; // use to track whether currently colliding with anything or not
 
     // Need to be able to identify angle of control inputs from questrig?
     // or from openXR adjusted code
@@ -34,12 +38,14 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        collisionCount = 0;
+        isGrounded = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log("rb vel: " + rb.velocity);
     }
 
     public bool CheckLeftGrapple()
@@ -50,6 +56,61 @@ public class Player : MonoBehaviour
     public bool CheckRightGrapple()
     {
         return rightGrapple.latched;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collisionCount++;
+        Debug.Log("count up: " + collisionCount);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        collisionCount--;
+        Debug.Log("count up: " + collisionCount);
+    }
+
+    public bool IsGrounded()
+    {
+        // When not grounded the player is not colliding with any ground collider
+        // right now defining based on any collider, later may constrain to ground colliders
+        // Only ground and building to collide to anyways
+        if(collisionCount == 0)
+        {
+            return false; // Not grounded, falling
+        }
+        else
+        {
+            return true; // Grounded, in contact with surface
+        }
+    }
+
+    // Checks if reel input is being fired
+    public bool CheckLeftReelInput()
+    {
+        return inputs.GetLeftReelInput();
+    }
+    public bool CheckRightReelInput()
+    {
+        return inputs.GetRightReelInput();
+    }
+    // Returns length of line from grapple gun shot origin to grapple latch point
+    public float GetLeftGrappleLength()
+    {
+        return leftGrapple.distanceToGun();
+    }
+    public float GetRightGrappleLength()
+    {
+        return rightGrapple.distanceToGun();
+    }
+    // Returns the direction that a player should be reeled in according to left and right grapple/latch orientation
+    public Vector3 GetLeftReelDirection()
+    {
+        return leftGrapple.GetLatchDirection();
+    }
+    public Vector3 GetRightReelDirection()
+    {
+        return rightGrapple.GetLatchDirection();
     }
 }
 

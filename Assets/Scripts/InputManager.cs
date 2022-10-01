@@ -64,7 +64,25 @@ public class InputManager : MonoBehaviour
             float rightTest;
             leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out leftTest);
             rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out rightTest);
-            Debug.Log("LEFT TRIGGER: " + leftTest + " RIGHT TRIGGER: " + rightTest);
+
+            ///TODO potentially need to constrain reeling so that it can only be done if both reels triggered at once
+            /// I feel reeling with one arm may cause issues physically and make the system harder to intuitively interact with
+            if (leftTest > reelInputThreshold)
+            {
+                leftReelInput = true;
+            }
+            else
+            {
+                leftReelInput = false;
+            }
+            if (rightTest > reelInputThreshold)
+            {
+                rightReelInput = true;
+            }
+            else
+            {
+                rightReelInput = false;
+            }
         }
     }
 
