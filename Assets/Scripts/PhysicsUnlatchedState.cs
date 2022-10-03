@@ -5,7 +5,7 @@ public class PhysicsUnlatchedState : PhysicsState
     
     public override void EnterState(PhysicsHandler physics)
     {
-        Debug.Log("Entering UNLATCHED STATE");
+        //Debug.Log("Entering UNLATCHED STATE");
     }
 
     public override void UpdateState(PhysicsHandler physics)

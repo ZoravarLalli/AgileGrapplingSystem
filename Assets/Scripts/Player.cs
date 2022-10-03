@@ -57,6 +57,15 @@ public class Player : MonoBehaviour
     {
         return rightGrapple.latched;
     }
+    public Vector3 GetLeftLatchPoint()
+    {
+        return leftGrapple.GetLatchPosition();
+    }
+
+    public Vector3 GetRightLatchPoint()
+    {
+        return rightGrapple.GetLatchPosition();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -132,6 +141,15 @@ public class Player : MonoBehaviour
     public float GetRightSwingAmount()
     {
         return inputs.GetRightSwingInputAmount();
+    }
+    // Get the head rotation in Euler Angle vector
+    public Transform GetPlayerCamTransform()
+    {
+        //return inputs.GetHeadEulerRotation();\
+        // I'm having issues using the position headset of the data in calculations for momentum adjustment
+        // however the headset is correctly manipulating the player mesh in game, so I am going to try and indirectly
+        // capture headset orientation through the sensor controlled mesh's attributes.
+        return playerCamera.transform;
     }
 
 }

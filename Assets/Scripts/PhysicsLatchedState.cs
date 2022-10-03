@@ -6,7 +6,7 @@ public class PhysicsLatchedState : PhysicsState
 {
     public override void EnterState(PhysicsHandler physics)
     {
-        Debug.Log("Entering LATCHED STATE");
+        //Debug.Log("Entering LATCHED STATE");
     }
 
     public override void UpdateState(PhysicsHandler physics)

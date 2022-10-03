@@ -28,11 +28,20 @@ public class PhysicsHandler : MonoBehaviour
     [SerializeField]
     public float swingGravityIncreaseAmount;
     [SerializeField]
-    public LineRenderer visualizeReelForceLeft;
+    public float maxSwingDistance;
     [SerializeField]
-    public LineRenderer visualizeReelForceRight;
-    //[SerializeField]
-    //public float swingGravityMaximum;
+    public float minSwingDistance;
+    [SerializeField]
+    public float swingSpring;
+    [SerializeField]
+    public float swingDamper;
+    [SerializeField]
+    public float swingMassScale;
+    [SerializeField]
+    public float momentumAdjustmentForce;
+    [SerializeField]
+    public LineRenderer physicsLineMomentumAdjustment;
+
 
 
     // Current state to start from and drive Finite State Machine
@@ -54,13 +63,13 @@ public class PhysicsHandler : MonoBehaviour
     // Call the corresponding update function in the current state
     private void FixedUpdate()
     {
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, terminalVelocity);
         Debug.Log("VELOCITY: " + rb.velocity);
-        //Debug.Log("curr state: " + currentState);
+        Debug.Log("curr state: " + currentState);
         currentState.UpdateState(this);
 
         // Setting a terminal velocity so player cannot gain an excessive velocity
         // around 100 m/s is when it becomes to fast to react to incoming obstacles
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, terminalVelocity);
     }
 
     // Set the current active state in the FSM to the specified one

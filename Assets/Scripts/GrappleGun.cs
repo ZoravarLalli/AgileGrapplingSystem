@@ -273,6 +273,17 @@ public class GrappleGun : MonoBehaviour
             return Vector3.zero; // Send zero for force direction if no latch
         }
     }
+    public Vector3 GetLatchPosition()
+    {
+        if (latched)
+        {
+            return grappleScript.GetLatchPoint();
+        }
+        else
+        {
+            return Vector3.zero;
+        }
+    }
 }
 
 

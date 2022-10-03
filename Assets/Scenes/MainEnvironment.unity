@@ -246,9 +246,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityBuildingsCompactWithHover
       objectReference: {fileID: 0}
+    - target: {fileID: 6212944332886284149, guid: 81677f8ee33dca244aa35c20934fa3e0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 47.9
+      objectReference: {fileID: 0}
     - target: {fileID: 6212944333494625663, guid: 81677f8ee33dca244aa35c20934fa3e0, type: 3}
       propertyPath: m_Name
       value: CityBuildingsSpaced
+      objectReference: {fileID: 0}
+    - target: {fileID: 6212944333577318426, guid: 81677f8ee33dca244aa35c20934fa3e0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 51.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883606894898802230, guid: 81677f8ee33dca244aa35c20934fa3e0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 56.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81677f8ee33dca244aa35c20934fa3e0, type: 3}
@@ -263,6 +275,14 @@ PrefabInstance:
       propertyPath: m_XRRig
       value: 
       objectReference: {fileID: 451251882}
+    - target: {fileID: 649464413695187249, guid: 1e3d6bd50b5a53f45818a654a8189175, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 649464413695187249, guid: 1e3d6bd50b5a53f45818a654a8189175, type: 3}
+      propertyPath: m_EnableStrafe
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 649464413695187249, guid: 1e3d6bd50b5a53f45818a654a8189175, type: 3}
       propertyPath: m_ForwardSource
       value: 
@@ -324,6 +344,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 963677945497404171, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 963677945497404171, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 963677945497404171, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 963677945497404171, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 963677945497404171, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4248094484017587641, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
+      propertyPath: m_SettingsGUIToggle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6672488853539908367, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -338,7 +382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6672488854144283800, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 6672488854144283800, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -375,10 +419,6 @@ PrefabInstance:
     - target: {fileID: 6672488854144283802, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
       propertyPath: m_Name
       value: Player XR Rig
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672488854144283805, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6672488854962957213, guid: 5dd4ce6f6538e8148bd2bb78ee54c53b, type: 3}
       propertyPath: m_InteractionManager

@@ -78,7 +78,7 @@ public class GrappleLatch : MonoBehaviour
         Latch();
     }
 
-    // Setters
+    // Getters/Setters
     public void SetGun(GrappleGun grappleGun)
     {
         gun = grappleGun;
@@ -94,5 +94,9 @@ public class GrappleLatch : MonoBehaviour
     public void SetMaxDistance(float distance)
     {
         maxDistance = distance;
+    }
+    public Vector3 GetLatchPoint()
+    {
+        return latchPoint.point;
     }
 }

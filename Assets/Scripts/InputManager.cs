@@ -18,10 +18,11 @@ public class InputManager : MonoBehaviour
     // gonna try and make the swing input based on level of input
     private float leftSwingInputAmount;
     private float rightSwingInputAmount;
-    private Vector3 headOrientation;
-    // variables to hold references to the oculus controllers
+    private Vector3 headEulerRotation;
+    // variables to hold references to the oculus sensors
     private UnityEngine.XR.InputDevice leftController;
     private UnityEngine.XR.InputDevice rightController;
+    private UnityEngine.XR.InputDevice headset;
     [SerializeField]
     private float reelInputThreshold;    
 
@@ -35,7 +36,7 @@ public class InputManager : MonoBehaviour
         rightShotInput = false;
         leftSwingInputAmount = 0.0f;
         rightSwingInputAmount = 0.0f;
-        headOrientation = Vector3.zero;
+        headEulerRotation = Vector3.zero;
     }
 
     private void Start()
@@ -46,19 +47,23 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // get refs to controller, keep trying until controllers are valid, only valid once a valid controller assigned to variable
-        if(!leftController.isValid || !rightController.isValid)
+        
+        // get refs to sensor, keep trying until controllers are valid, only valid once a valid sensor assigned to variable
+        if(!leftController.isValid || !rightController.isValid || !headset.isValid)
         {
-            // Need to use lists to get reference to controllers first since using XRNode returns queried list result
+            // Need to use lists to get reference to sensors first since using XRNode returns queried list result
             var leftHandDevices = new List<UnityEngine.XR.InputDevice>();
             var rightHandDevices = new List<UnityEngine.XR.InputDevice>();
+            var headDevices = new List<UnityEngine.XR.InputDevice>();
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftHandDevices);
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightHandDevices);
-            // Now can assign first index of each list to variable to reference controllers
+            UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.Head, headDevices);
+            // Now can assign first item of each list to XR.InputDevice variables to reference sensors
             leftController = leftHandDevices[0];
             rightController = rightHandDevices[0];
+            headset = headDevices[0];
         }
-        else // Only process inputs once both controllers are set
+        else // Only process inputs once all sensors are ready
         {
             // Update shot input booleans according to if trigger to shoot is pressed or not
             leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out leftShotInput);
@@ -95,7 +100,11 @@ public class InputManager : MonoBehaviour
             // Update swing amount floats according to how much the side grip is pressed
             leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out leftSwingInputAmount);
             rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out rightSwingInputAmount);
+
             
+            Quaternion tempHeadRot; // Going to use euler angles instead, just need isolated y rotation from vector to factor into calculations
+            headset.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out tempHeadRot);
+            headEulerRotation = tempHeadRot.eulerAngles;
         }
     }
 
@@ -132,8 +141,8 @@ public class InputManager : MonoBehaviour
     {
         return rightSwingInputAmount;
     }
-    public Vector3 GetHeadOrientation()
+    public Vector3 GetHeadEulerRotation()
     {
-        return headOrientation;
+        return headEulerRotation;
     }
 }
