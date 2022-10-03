@@ -11,6 +11,13 @@ public class PhysicsFlyingState : PhysicsState
 
     public override void UpdateState(PhysicsHandler physics)
     {
+        // MOMENTUM DIRECTION ADJUSTMENT FUNCTIONALITY
+        // Use the player's headset orientation (rotation about the Y-axis) to adjust the
+        // momentum direction of the player to provide the ability to strafe and adjust path
+        // of travel while flying through the air
+
+
+        // STATE TRANSITIONS
         // Check if the player is grounded and go to unlatchedState if they are
         if (physics.player.IsGrounded())
         {

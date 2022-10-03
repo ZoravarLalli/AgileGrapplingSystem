@@ -45,9 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67894f8fb16211143b861a77ad7bb65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reelRate: 5
-  projectileSpeed: 6
-  maxDistance: 200
+  projectileSpeed: 10
+  maxDistance: 600
   left: 0
   latched: 0
   grappleLatch: {fileID: 1895103790318880576, guid: 858c505587c5b4f4badfab6faa9d58cd, type: 3}

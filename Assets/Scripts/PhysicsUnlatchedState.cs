@@ -10,6 +10,10 @@ public class PhysicsUnlatchedState : PhysicsState
 
     public override void UpdateState(PhysicsHandler physics)
     {
+        // Physics is implicitly handled via default rigidbody physics in this state
+        // No additional constraints required while in this state
+
+        // STATE TRANSITIONS
         // Check to see if we have shot either of the grapples and latched
         if (physics.player.CheckLeftGrapple() || physics.player.CheckRightGrapple())
         {

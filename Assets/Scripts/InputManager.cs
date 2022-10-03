@@ -15,6 +15,9 @@ public class InputManager : MonoBehaviour
     private bool rightReelInput;
     private bool rightSwingInput;
     private bool rightShotInput;
+    // gonna try and make the swing input based on level of input
+    private float leftSwingInputAmount;
+    private float rightSwingInputAmount;
     private Vector3 headOrientation;
     // variables to hold references to the oculus controllers
     private UnityEngine.XR.InputDevice leftController;
@@ -30,6 +33,8 @@ public class InputManager : MonoBehaviour
         rightReelInput = false;
         rightSwingInput = false;
         rightShotInput = false;
+        leftSwingInputAmount = 0.0f;
+        rightSwingInputAmount = 0.0f;
         headOrientation = Vector3.zero;
     }
 
@@ -55,19 +60,18 @@ public class InputManager : MonoBehaviour
         }
         else // Only process inputs once both controllers are set
         {
-            // Update shot booleans according to if trigger to shoot is pressed or not
+            // Update shot input booleans according to if trigger to shoot is pressed or not
             leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out leftShotInput);
             rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out rightShotInput);
 
-            // Update reel booleans according to if trigger is depressed past reel threshold or not
-            float leftTest;
-            float rightTest;
-            leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out leftTest);
-            rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out rightTest);
+            // Update reel input booleans according to if trigger is pressed past reel threshold or not
+            float leftReelTemp;
+            float rightReelTemp;
+            leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out leftReelTemp);
+            rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out rightReelTemp);
 
-            ///TODO potentially need to constrain reeling so that it can only be done if both reels triggered at once
-            /// I feel reeling with one arm may cause issues physically and make the system harder to intuitively interact with
-            if (leftTest > reelInputThreshold)
+            // Check if past threshold and update boolean
+            if (leftReelTemp > reelInputThreshold)
             {
                 leftReelInput = true;
             }
@@ -75,7 +79,7 @@ public class InputManager : MonoBehaviour
             {
                 leftReelInput = false;
             }
-            if (rightTest > reelInputThreshold)
+            if (rightReelTemp > reelInputThreshold)
             {
                 rightReelInput = true;
             }
@@ -83,33 +87,50 @@ public class InputManager : MonoBehaviour
             {
                 rightReelInput = false;
             }
+
+            // Update swing input booleans according to if side grip button is pressed or not
+            leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out leftSwingInput);
+            rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out rightSwingInput);
+
+            // Update swing amount floats according to how much the side grip is pressed
+            leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out leftSwingInputAmount);
+            rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out rightSwingInputAmount);
+            
         }
     }
 
     // Getters
-    public bool GetLeftReelInput()
-    {
-        return leftReelInput;
-    }
-    public bool GetLeftSwingInput()
-    {
-        return leftSwingInput;
-    }
     public bool GetLeftShotInput()
     {
         return leftShotInput;
+    }
+    public bool GetRightShotInput()
+    {
+        return rightShotInput;
+    }
+    public bool GetLeftReelInput()
+    {
+        return leftReelInput;
     }
     public bool GetRightReelInput()
     {
         return rightReelInput;
     }
+    public bool GetLeftSwingInput()
+    {
+        return leftSwingInput;
+    }
     public bool GetRightSwingInput()
     {
         return rightSwingInput;
     }
-    public bool GetRightShotInput()
+    public float GetLeftSwingInputAmount()
     {
-        return rightShotInput;
+        return leftSwingInputAmount;
+    }
+    public float GetRightSwingInputAmount()
+    {
+        return rightSwingInputAmount;
     }
     public Vector3 GetHeadOrientation()
     {

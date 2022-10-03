@@ -571,10 +571,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6672488854144283805}
   player: {fileID: 6672488853613150889}
-  reelRate: 100
+  reelRate: 3000
+  swingRate: 2000
   momentumGainRate: 2
-  terminalVelocity: 3000
+  terminalVelocity: 100
   minReelLength: 0.1
+  swingGravityIncreaseAmount: 1.05
+  visualizeReelForceLeft: {fileID: 0}
+  visualizeReelForceRight: {fileID: 0}
 --- !u!114 &6672488853613150889
 MonoBehaviour:
   m_ObjectHideFlags: 0

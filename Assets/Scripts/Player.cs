@@ -61,13 +61,16 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         collisionCount++;
-        Debug.Log("count up: " + collisionCount);
+        // Stop from sliding when hitting surface at speed
+        physics.rb.velocity = Vector3.zero;
+        physics.rb.angularVelocity = Vector3.zero;
+        //Debug.Log("count up: " + collisionCount);
     }
 
     private void OnCollisionExit(Collision collision)
     {
         collisionCount--;
-        Debug.Log("count up: " + collisionCount);
+        //Debug.Log("count up: " + collisionCount);
     }
 
     public bool IsGrounded()
@@ -112,5 +115,24 @@ public class Player : MonoBehaviour
     {
         return rightGrapple.GetLatchDirection();
     }
+    // Checks if swing input is being fired
+    public bool CheckLeftSwingInput()
+    {
+        return inputs.GetLeftSwingInput();
+    }
+    public bool CheckRightSwingInput()
+    {
+        return inputs.GetRightSwingInput();
+    }
+    // Get the amount the swing input is pressed
+    public float GetLeftSwingAmount()
+    {
+        return inputs.GetLeftSwingInputAmount();
+    }
+    public float GetRightSwingAmount()
+    {
+        return inputs.GetRightSwingInputAmount();
+    }
+
 }
 

@@ -11,8 +11,12 @@ public class PhysicsLatchedState : PhysicsState
 
     public override void UpdateState(PhysicsHandler physics)
     {
+        // Physics is implicitly handled via default rigidbody physics in this state
+        // No additional constraints required while in this state
+
+        // STATE TRANSITIONS
         // Check to see if all grapples are released
-        if(!physics.player.CheckLeftGrapple() && !physics.player.CheckRightGrapple())
+        if (!physics.player.CheckLeftGrapple() && !physics.player.CheckRightGrapple())
         {
             // Grapple released transition to Unlatched State
             physics.ChangeState(physics.UnlatchedState);

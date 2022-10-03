@@ -26,19 +26,21 @@ public class PhysicsReelState : PhysicsState
 
     public override void UpdateState(PhysicsHandler physics)
     {
-        // Check which grapples are reeling and apply reel physics to them if they are
-        // Reel the player towards the grapples until we get to min reel length
+        // REELING FUNCTIONALITY
+        // Check which grapples are reeling and if they are then reel the player towards
+        // the grapples (add force in the direction of the grapple latch point from player
+        // position) until we get to min reel length.
         if (physics.player.GetLeftGrappleLength() > physics.minReelLength) 
         {
-            //vector<float> forces = calculateReelForceAdjustment()
-            //player.updateForceVector(forces)
-            physics.rb.AddForce(physics.player.GetLeftReelDirection() * physics.reelRate);
+            // Normalize the force, I don't know if magnitude affects this or not but normalizing incase
+            physics.rb.AddForce(physics.player.GetLeftReelDirection().normalized * physics.reelRate);
         }
         if (physics.player.GetRightGrappleLength() > physics.minReelLength)
         {
-            physics.rb.AddForce(physics.player.GetRightReelDirection() * physics.reelRate);
+            physics.rb.AddForce(physics.player.GetRightReelDirection().normalized * physics.reelRate);
         }
 
+        // STATE TRANSITIONS
         // If grapples fully released and not grounded then go to flyingState
         if ((!physics.player.CheckLeftGrapple() && !physics.player.CheckRightGrapple()) && !physics.player.IsGrounded())
         {

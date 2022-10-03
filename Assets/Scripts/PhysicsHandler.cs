@@ -18,11 +18,21 @@ public class PhysicsHandler : MonoBehaviour
     [SerializeField]
     public float reelRate;
     [SerializeField]
+    public float swingRate;
+    [SerializeField]
     public float momentumGainRate;
     [SerializeField]
     public float terminalVelocity;
     [SerializeField]
     public float minReelLength;
+    [SerializeField]
+    public float swingGravityIncreaseAmount;
+    [SerializeField]
+    public LineRenderer visualizeReelForceLeft;
+    [SerializeField]
+    public LineRenderer visualizeReelForceRight;
+    //[SerializeField]
+    //public float swingGravityMaximum;
 
 
     // Current state to start from and drive Finite State Machine
@@ -44,8 +54,13 @@ public class PhysicsHandler : MonoBehaviour
     // Call the corresponding update function in the current state
     private void FixedUpdate()
     {
-        Debug.Log("curr state: " + currentState);
+        Debug.Log("VELOCITY: " + rb.velocity);
+        //Debug.Log("curr state: " + currentState);
         currentState.UpdateState(this);
+
+        // Setting a terminal velocity so player cannot gain an excessive velocity
+        // around 100 m/s is when it becomes to fast to react to incoming obstacles
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, terminalVelocity);
     }
 
     // Set the current active state in the FSM to the specified one
@@ -55,8 +70,7 @@ public class PhysicsHandler : MonoBehaviour
         state.EnterState(this);
     }
 
-
-    // Update the forces acting on the player's rigidbody
+/*    // Update the forces acting on the player's rigidbody
     // according to the currently active physics state
     public Vector3 UpdateForces()
     {
@@ -79,5 +93,5 @@ public class PhysicsHandler : MonoBehaviour
     private void ApplySwingForce()
     {
         ///TODO Swing force application done based on button press
-    }
+    }*/
 }
