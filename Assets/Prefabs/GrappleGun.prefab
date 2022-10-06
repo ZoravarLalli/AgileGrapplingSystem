@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67894f8fb16211143b861a77ad7bb65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 10
+  projectileSpeed: 1000
   maxDistance: 600
   left: 0
   latched: 0

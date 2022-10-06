@@ -71,8 +71,8 @@ public class Player : MonoBehaviour
     {
         collisionCount++;
         // Stop from sliding when hitting surface at speed
-        physics.rb.velocity = Vector3.zero;
-        physics.rb.angularVelocity = Vector3.zero;
+        //physics.rb.velocity = Vector3.zero;
+       // physics.rb.angularVelocity = Vector3.zero;
         //Debug.Log("count up: " + collisionCount);
     }
 

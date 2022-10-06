@@ -54,7 +54,8 @@ public class PhysicsReelState : PhysicsState
             physics.ChangeState(physics.LatchedState);
         }
         // If latches are attached, reeling is ceased and player is not grounded then go to swingState
-        else if (((physics.player.CheckLeftGrapple() || physics.player.CheckRightGrapple()) && (!physics.player.CheckLeftReelInput() && !physics.player.CheckRightReelInput())) && !physics.player.IsGrounded())
+        else if ((((physics.player.CheckLeftGrapple() || physics.player.CheckRightGrapple()) 
+            && (!physics.player.CheckLeftReelInput() && !physics.player.CheckRightReelInput()))) && !physics.player.IsGrounded())
         {
             // Release reel input & !grounded transition to swingState
             physics.ChangeState(physics.SwingState);

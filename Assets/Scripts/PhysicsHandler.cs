@@ -18,8 +18,6 @@ public class PhysicsHandler : MonoBehaviour
     [SerializeField]
     public float reelRate;
     [SerializeField]
-    public float swingRate;
-    [SerializeField]
     public float momentumGainRate;
     [SerializeField]
     public float terminalVelocity;
@@ -36,11 +34,23 @@ public class PhysicsHandler : MonoBehaviour
     [SerializeField]
     public float swingDamper;
     [SerializeField]
-    public float swingMassScale;
+    public float swingBoostForce;
+    [SerializeField]
+    public float swingBoostFactor;
+    [SerializeField]
+    public float swingDownwardForce;
     [SerializeField]
     public float momentumAdjustmentForce;
     [SerializeField]
     public LineRenderer physicsLineMomentumAdjustment;
+    [SerializeField]
+    public float joystickForceValue;
+    [SerializeField]
+    public float joystickDeadzone;
+    private Vector2 joystickVal;
+    private Transform currPlayerCamTrans;
+    private Vector3 camForwardAdjusted;
+    private Vector3 camRightAdjusted;
 
 
 
@@ -63,13 +73,102 @@ public class PhysicsHandler : MonoBehaviour
     // Call the corresponding update function in the current state
     private void FixedUpdate()
     {
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, terminalVelocity);
         Debug.Log("VELOCITY: " + rb.velocity);
         Debug.Log("curr state: " + currentState);
+
+        // PHYSICS UPDATE LOOP DRIVES STATE MACHINE
         currentState.UpdateState(this);
 
         // Setting a terminal velocity so player cannot gain an excessive velocity
         // around 100 m/s is when it becomes to fast to react to incoming obstacles
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, terminalVelocity);
+
+        // Base Movement and Force Adjustment control
+        // Can use for base movement on ground or to manipulate path of motion while grappling
+        joystickVal = player.inputs.GetJoystickValue();
+        currPlayerCamTrans = player.GetPlayerCamTransform();
+        camForwardAdjusted = new Vector3(currPlayerCamTrans.forward.x, 0, currPlayerCamTrans.forward.z);
+        camRightAdjusted = new Vector3(currPlayerCamTrans.right.x, 0, currPlayerCamTrans.right.z);
+
+        // Backward
+        if (joystickVal.y < 0 - joystickDeadzone)
+        {
+            Debug.Log("BACK: " + player.inputs.GetJoystickValue());
+            rb.AddForce(-camForwardAdjusted * joystickForceValue);
+        }
+        if (joystickVal.y > 0 + joystickDeadzone) // Forward
+        {
+            Debug.Log("FORWARD: " + player.inputs.GetJoystickValue());
+            rb.AddForce(camForwardAdjusted * joystickForceValue);
+        }
+        if (joystickVal.x < 0 - joystickDeadzone) // Left
+        {
+            Debug.Log("LEFT: " + player.inputs.GetJoystickValue());
+            rb.AddForce(-camRightAdjusted * joystickForceValue);
+        }
+        if (joystickVal.x > 0 + joystickDeadzone) // Right
+        {
+            Debug.Log("Right: " + player.inputs.GetJoystickValue());
+            rb.AddForce(camRightAdjusted * joystickForceValue);
+        }
+
+
+
+
+        /*        Debug.Log("Spring: " + swingSpring);
+        Debug.Log("Damper: " + swingDamper);
+        Debug.Log("Mass: " + rb.mass);
+        Debug.Log("maxSwingDistance: " + maxSwingDistance);
+        Debug.Log("minSwingDistance: " + minSwingDistance);
+        Debug.Log("swingBoost: " + swingBoostForce);*/
+        // Testing physc values for swinging live
+        /*        if (Input.GetKey(KeyCode.Q))
+                {
+                    swingSpring++;
+                } else if (Input.GetKey(KeyCode.A))
+                {
+                    swingSpring--;
+                }
+                if (Input.GetKey(KeyCode.W))
+                {
+                    swingDamper++;
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    swingDamper--;
+                }
+                if (Input.GetKey(KeyCode.E))
+                {
+                    rb.mass++;
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    rb.mass--;
+                }
+                if (Input.GetKey(KeyCode.R))
+                {
+                    maxSwingDistance += 0.01f;
+                }
+                else if (Input.GetKey(KeyCode.F))
+                {
+                    maxSwingDistance -= 0.01f;
+                }
+                if (Input.GetKey(KeyCode.T))
+                {
+                    minSwingDistance += 0.01f;
+                }
+                else if (Input.GetKey(KeyCode.G))
+                {
+                    minSwingDistance -= 0.01f;
+                }
+                if (Input.GetKey(KeyCode.Y))
+                {
+                    swingBoostForce++;
+                }
+                else if (Input.GetKey(KeyCode.H))
+                {
+                    swingBoostForce--; 
+                }*/
     }
 
     // Set the current active state in the FSM to the specified one

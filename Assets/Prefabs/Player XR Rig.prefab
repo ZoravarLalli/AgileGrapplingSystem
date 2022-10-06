@@ -491,7 +491,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6672488854895294526}
-  - {fileID: 6887206830143101878}
+  - {fileID: 516376805844527756}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -550,7 +550,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6672488854144283802}
   serializedVersion: 2
-  m_Mass: 40
+  m_Mass: 55
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -573,18 +573,21 @@ MonoBehaviour:
   rb: {fileID: 6672488854144283805}
   player: {fileID: 6672488853613150889}
   reelRate: 3000
-  swingRate: 2000
   momentumGainRate: 2
   terminalVelocity: 100
   minReelLength: 0.1
   swingGravityIncreaseAmount: 1.05
-  maxSwingDistance: 0.8
-  minSwingDistance: 0.25
-  swingSpring: 4.5
-  swingDamper: 7
-  swingMassScale: 4.5
-  momentumAdjustmentForce: 40
+  maxSwingDistance: 0
+  minSwingDistance: 0
+  swingSpring: 15
+  swingDamper: 700
+  swingBoostForce: 3000
+  swingBoostFactor: 0.1
+  swingDownwardForce: 100
+  momentumAdjustmentForce: 500
   physicsLineMomentumAdjustment: {fileID: 774352261257136711}
+  joystickForceValue: 1500
+  joystickDeadzone: 0.1
 --- !u!114 &6672488853613150889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,9 +600,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf9f3ef7a235048b9164d497a26fe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftGrapple: {fileID: 7748165364858388777}
-  rightGrapple: {fileID: 2640928967513951639}
-  transform: {fileID: 6887206830143101878}
+  leftGrapple: {fileID: 3691206486669750291}
+  rightGrapple: {fileID: 8942100471783013549}
+  transform: {fileID: 516376805844527756}
   playerCamera: {fileID: 6672488854354968117}
   physics: {fileID: 6672488853613150890}
   inputs: {fileID: 6672488853613150886}
@@ -1333,7 +1336,7 @@ MonoBehaviour:
   m_SnapThresholdDistance: 10
   m_Reticle: {fileID: 0}
   m_StopLineAtFirstRaycastHit: 1
---- !u!1001 &870158438083442493
+--- !u!1001 &6101712952372119047
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1352,10 +1355,6 @@ PrefabInstance:
       propertyPath: right.sensor
       value: 
       objectReference: {fileID: 6672488853539908362}
-    - target: {fileID: 5803483228622902960, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 6672488854354968117}
     - target: {fileID: 6018826027484540043, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1406,15 +1405,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
---- !u!4 &6887206830143101878 stripped
+--- !u!4 &516376805844527756 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6018826027484540043, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
-  m_PrefabInstance: {fileID: 870158438083442493}
+  m_PrefabInstance: {fileID: 6101712952372119047}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7748165364858388777 stripped
+--- !u!114 &3691206486669750291 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7463712683693127188, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
-  m_PrefabInstance: {fileID: 870158438083442493}
+  m_PrefabInstance: {fileID: 6101712952372119047}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -1422,10 +1421,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67894f8fb16211143b861a77ad7bb65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2640928967513951639 stripped
+--- !u!114 &8942100471783013549 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2933279982672214698, guid: 7b2f5b6d7b1d1fa47b0010629a6fc903, type: 3}
-  m_PrefabInstance: {fileID: 870158438083442493}
+  m_PrefabInstance: {fileID: 6101712952372119047}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1

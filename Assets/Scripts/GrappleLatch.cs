@@ -7,10 +7,13 @@ public class GrappleLatch : MonoBehaviour
     private GameObject self; // Can use this for the physical object representing grapple in game
     private GrappleGun gun; // the gun that shot the grapple
     private bool latched;
-    private ContactPoint latchPoint; // The point the latch is attached to the collided surface at
+    //private ContactPoint latchPoint; // The point the latch is attached to the collided surface at
     private Vector3 angle;
     private float projectileSpeed;
     private float maxDistance;
+    [SerializeField]
+    private Rigidbody rb;
+    private Vector3 latchPoint; //  THe hitscan returned point when grapple was fired.
 
     void Start()
     {
@@ -21,22 +24,25 @@ public class GrappleLatch : MonoBehaviour
     // Check for collisions with Grappleable objects and apply appropriate function depending on latched status
     void Update()
     {
-        if (latched) 
+        // hitscan now instead of physical grapples due to collision issues...
+        transform.position = latchPoint;
+/*        if (latched) 
         {
             // bind transform to latchPoint transform so it is stuck
-            transform.position = latchPoint.point;
+            // Latchpoint was being retrieved from collision contacts and glitchy, freezing rb position on collision instead now.
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             Debug.Log("Grapple Pos: " + transform.position);
         }
         else
         {
-            transform.Translate(angle * Time.deltaTime * projectileSpeed);
+            //rb.AddForce(angle * projectileSpeed);
             
             // Destroy grapple latch if we don't hit a target within the allowed range
             if(distanceToGun() > maxDistance)
             {
                 Destroy(gameObject);
             }
-        }
+        }*/
     }
 
     // Latch the grapple to any Grappleable object it is in collision with currently.
@@ -74,7 +80,8 @@ public class GrappleLatch : MonoBehaviour
     {
         Debug.Log("HIT A WALL");
         // get the contact point to latch to
-        latchPoint = collision.GetContact(0);
+        //latchPoint = collision.GetContact(0);
+        Debug.Log("Contact Count: " + collision.contactCount);
         Latch();
     }
 
@@ -95,8 +102,13 @@ public class GrappleLatch : MonoBehaviour
     {
         maxDistance = distance;
     }
+    public void SetLatchPoint(Vector3 point)
+    {
+        latchPoint = point;
+    }
     public Vector3 GetLatchPoint()
     {
-        return latchPoint.point;
+        //return latchPoint.point;
+        return latchPoint;
     }
 }

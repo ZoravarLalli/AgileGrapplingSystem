@@ -28,6 +28,8 @@ public class GrappleGun : MonoBehaviour
     private UnityEngine.XR.InputDevice controller;
     private LineRenderer grappleLine;
 
+    public Vector3 currentHitPoint;
+
     // Hooking refs to line renderers to draw grapple lines.
     private void Awake()
     {
@@ -112,6 +114,7 @@ public class GrappleGun : MonoBehaviour
             //grappleLine.SetPosition(1, hit.point); // careful it will stay if not cleared.
             //grappleLine.SetColors(Color.green, Color.green);
             //Debug.Log("ON GRAPPLEABLE TARGET " + hit.collider.gameObject.name);
+            currentHitPoint = hit.point;
             validTarget = true;
         }
         else
@@ -128,7 +131,7 @@ public class GrappleGun : MonoBehaviour
 
     // Fires a GrappleLatch object from the GrappleGun's transform position along the specified trajectory angle
     // Latch impact handling logic is in GrappleLatch.
-    public void FireGrapple(Vector3 angle)
+    public void FireGrapple(Vector3 angle, Vector3 hitPoint)
     {
 
         // First check if target is valid and shot not already fired
@@ -145,6 +148,7 @@ public class GrappleGun : MonoBehaviour
             grappleScript.SetAngle(angle);
             grappleScript.SetSpeed(projectileSpeed);
             grappleScript.SetMaxDistance(maxDistance);
+            grappleScript.SetLatchPoint(hitPoint);
 
 
             isFired = true; // Set the shot to be true to it wont repeat
@@ -178,7 +182,7 @@ public class GrappleGun : MonoBehaviour
         if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerPressed) && triggerPressed)
         {
             // May need to make grapples fireable while one is still held instead of after destroying old one
-            FireGrapple(aimingAngle);
+            FireGrapple(aimingAngle, currentHitPoint);
         }
 /*        else if(isFired == true) // keep firing so long as it is true
         {
@@ -188,7 +192,7 @@ public class GrappleGun : MonoBehaviour
 
         if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButtonPressed) && secondaryButtonPressed) // when press secondary button
         {
-            if((isFired == true && latched == true) )
+            if((isFired == true) )
             {
                 // Doing destruction here as destroying in the grappleObj scripts tries to destroy 
                 // asset prefab instead of instance of prefab in game... Weird error
@@ -197,7 +201,6 @@ public class GrappleGun : MonoBehaviour
                 latched = false;
             }
         }
-        
     }
 
     // Using late update to draw grapple line so that it doesnt stutter

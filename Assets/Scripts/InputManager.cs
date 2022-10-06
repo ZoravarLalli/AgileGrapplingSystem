@@ -15,10 +15,10 @@ public class InputManager : MonoBehaviour
     private bool rightReelInput;
     private bool rightSwingInput;
     private bool rightShotInput;
-    // gonna try and make the swing input based on level of input
     private float leftSwingInputAmount;
     private float rightSwingInputAmount;
     private Vector3 headEulerRotation;
+    private Vector2 joystickValue;
     // variables to hold references to the oculus sensors
     private UnityEngine.XR.InputDevice leftController;
     private UnityEngine.XR.InputDevice rightController;
@@ -47,9 +47,9 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         // get refs to sensor, keep trying until controllers are valid, only valid once a valid sensor assigned to variable
-        if(!leftController.isValid || !rightController.isValid || !headset.isValid)
+        if (!leftController.isValid || !rightController.isValid || !headset.isValid)
         {
             // Need to use lists to get reference to sensors first since using XRNode returns queried list result
             var leftHandDevices = new List<UnityEngine.XR.InputDevice>();
@@ -101,10 +101,8 @@ public class InputManager : MonoBehaviour
             leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out leftSwingInputAmount);
             rightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out rightSwingInputAmount);
 
-            
-            Quaternion tempHeadRot; // Going to use euler angles instead, just need isolated y rotation from vector to factor into calculations
-            headset.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out tempHeadRot);
-            headEulerRotation = tempHeadRot.eulerAngles;
+            // Using this value for force manipulation via joystick to give extra control over motion path
+            leftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out joystickValue);
         }
     }
 
@@ -144,5 +142,9 @@ public class InputManager : MonoBehaviour
     public Vector3 GetHeadEulerRotation()
     {
         return headEulerRotation;
+    }
+    public Vector2 GetJoystickValue()
+    {
+        return joystickValue;
     }
 }
